@@ -25,7 +25,7 @@ function is_taken_ten($tensp){
 
 function is_valid_hinhmh(){
     $hinhmh=$_FILES["hinhmh"];
-    if(!($hinhmh["type"]=="image/gif" || $hinhmh["type"]=="image/jpeg" || $hinhmh["type"]=="image/pjpeg") ){
+    if(!($hinhmh["type"]=="image/gif" || $hinhmh["type"]=="image/jpeg" || $hinhmh["type"]=="image/pjpeg"|| $hinhmh["type"]=="image/png") ){
         return "not image";
     }
     if(file_exists("./upload/".$hinhmh["tmp_name"])){
@@ -67,11 +67,15 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && $_POST["submit"]==="them"){
         die();
     }
 
-    move_uploaded_file($hinhmh["tmp_name"],"./upload/".$hinhmh["tmp_name"]);
-    $hinhmh_path="./upload/".$hinhmh["tmp_name"];
+    move_uploaded_file($hinhmh["tmp_name"],"./upload/".$hinhmh["name"]);
+    $hinhmh_path="./upload/".$hinhmh["name"];
+    var_dump($hinhmh_path);
+    echo "<br>";
     include_once "db.inc.php";
     $conn=connectDB();
-    $res=$conn->query("insert into sanpham (ten, gia, hinhmh) values ('$ten',$gia,'$hinhmh_path');");
+    $res=$conn->query("insert into sanpham (ten, gia, hinhmh) values ('$tensp',$gia,'$hinhmh_path');");
+    
+    
     if($res){
         header("Location: themsp.php?them=true");
     }
@@ -80,6 +84,9 @@ if($_SERVER["REQUEST_METHOD"]=="POST" && $_POST["submit"]==="them"){
     }
 
 
+
+    var_dump($hinhmh["tmp_name"]);
+    var_dump($hinhmh["name"]);
 
 }
 else{
